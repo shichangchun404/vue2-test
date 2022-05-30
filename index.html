@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="./dist/vue.js"></script>
+</head>
+
+<body>
+  <script>
+    const vm = new Vue({
+      data() { // 此时vm.$options.datam没有set get
+        return {
+          name: 'scc',
+          age: 20,
+          address: {
+            city: '北京'
+          },
+          hobby: ['book', 'sports', { name: '小红', age: 18 }]
+        }
+      }
+      // data: { // 此时vm.$options.data也有set get
+      //   name: 'scc',
+      //   age: 20
+      // }
+    })
+    console.log(vm)
+  </script>
+</body>
+
+</html>
