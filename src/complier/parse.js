@@ -83,7 +83,7 @@ export function parseHtml(html) {
 
   function chars(text) { // 文本节点 直接放到当前指向的节点中
     text = text.trim()
-    currentParent.children.push({
+    text && currentParent.children.push({
       text,
       type: TEXT_TYPE,
       parent: currentParent
@@ -123,7 +123,7 @@ export function parseHtml(html) {
       continue
     }
   }
-  console.log('html = ', html)
-  console.log('ast语法树 root = ', root)
+  // console.log('html = ', html)
+  // console.log('ast语法树 root = ', root)
   return root
 }
