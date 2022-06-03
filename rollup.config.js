@@ -1,4 +1,5 @@
 import babel from 'rollup-plugin-babel'
+import resolve from '@rollup/plugin-node-resolve'
 // 导出一个对象 作为rollup配置文件 默认查找根目录下的rollup.config.js
 export default {
   input: './src/index.js', // 打包入口文件
@@ -11,6 +12,7 @@ export default {
   plugins: [
     babel({
       exclude: 'node_modules/**'
-    })
+    }),
+    resolve()
   ]
 }

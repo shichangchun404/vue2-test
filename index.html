@@ -10,25 +10,33 @@
 </head>
 
 <body>
-  <script>
-    const vm = new Vue({
-      data() { // 此时vm.$options.datam没有set get
-        return {
-          name: 'scc',
-          age: 20,
-          address: {
-            city: '北京'
-          },
-          hobby: ['book', 'sports', { name: '小红', age: 18 }]
-        }
-      }
-      // data: { // 此时vm.$options.data也有set get
-      //   name: 'scc',
-      //   age: 20
-      // }
-    })
-    console.log(vm)
-  </script>
+ <div id="app" class=" app ">
+   <div class="name" disabled>
+    my name is {{ name }}
+   </div>
+   <p class="age">
+    i am {{age}} years old
+   </p> 
+ </div>
 </body>
-
+<script>
+  const vm = new Vue({
+    el: "#app",
+    data() { // 此时vm.$options.data没有set get
+      return {
+        name: 'shicc',
+        age: 20,
+        address: {
+          city: '北京'
+        },
+        hobby: ['book', 'sports', { name: '小红', age: 18 }]
+      }
+    }
+    // data: { // 此时vm.$options.data也有set get
+    //   name: 'scc',
+    //   age: 20
+    // }
+  })
+  console.log(vm)
+</script>
 </html>
