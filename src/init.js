@@ -24,7 +24,7 @@ export function initMixin(Vue){ // 给vue增加init方法
       }else { // 否则以配置template的为模板
         template = opts.template
       }
-      console.log(template)
+      // console.log(template)
       // 如果有template 需要对其编译
       if(template){
         const render = compileToFunction(template)

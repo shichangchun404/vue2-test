@@ -46,11 +46,11 @@ export function defineReactive(target, key, value) { // 此处为闭包
   }
   Object.defineProperty(target, key, {
     get() { // 获取值时
-      console.log('get value ', value)
+      // console.log('get value ', value)
       return value
     },
     set(newValue) { // 设置值时触发
-      console.log('set value ', 'oldValue= ', value, 'newValue=', newValue)
+      // console.log('set value ', 'oldValue= ', value, 'newValue=', newValue)
       if (value === newValue) return
       value = newValue
     }
@@ -59,7 +59,7 @@ export function defineReactive(target, key, value) { // 此处为闭包
 }
 
 export function observe(data) {
-  console.log('observe ',data)
+  // console.log('observe ',data)
   if (typeof data != 'object' || data == null) { // 只对对象劫持
     return
   }

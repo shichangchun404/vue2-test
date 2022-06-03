@@ -11,7 +11,7 @@ methods.forEach(method => {
   // arr.push(1,2,3)
   newArrayProto[method] = function(...args){ // 重写数组方法
     // 自定义功能 
-    console.log('重写数组方法 ... ', method)
+    // console.log('重写数组方法 ... ', method)
 
     // this >>> arr
     const result = oldArrayProto[method].call(this,...args) // 内部调用原来的方法 函数劫持 切片编程
@@ -29,7 +29,7 @@ methods.forEach(method => {
       default:
         break;
     }
-    console.log('inserted ', inserted)
+    // console.log('inserted ', inserted)
     if(inserted){
       ob.observeArray(inserted)
     }
