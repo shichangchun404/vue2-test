@@ -12,6 +12,8 @@ export function initMixin(Vue){ // 给vue增加init方法
     if(options.el){
       vm.$mount(options.el)
     }
+
+
   }
 
   Vue.prototype.$mount = function(el){
@@ -33,9 +35,10 @@ export function initMixin(Vue){ // 给vue增加init方法
       }
     }
     // 最后统一了render函数为 opts.render
-    console.log('opts.render ', opts.render)
+    // console.log('opts.render ', opts.render)
 
     mountComponent(vm, el) // 组件的挂载
   }
 }
+
 

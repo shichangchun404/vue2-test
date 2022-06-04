@@ -10,16 +10,10 @@
 </head>
 
 <body>
- <div id="app" class="app" style="color:red;background: gray;">
-  {{ name }}, {{ name }}, {{ name }}, 
-   <div class="name" disabled>
-    hi {{ name }}, {{name}} hi
-   </div>
-   <p class="age" style="color:aqua">
-    i am {{age}} years old
-   </p> 
+ <div id="app">
+   <div>==========  计算属性  ===========</div>
    <div>
-    hobby === {{hobby}}
+     {{fullName}}  {{fullName}}  {{fullName}}
    </div>
  </div>
 </body>
@@ -28,12 +22,20 @@
     el: "#app",
     data() { // 此时vm.$options.data没有set get
       return {
+        firstname: '施',
+        lastName: '长春',
         name: 'shicc',
         age: 20,
         address: {
           city: '北京'
         },
         hobby: ['book', 'sports',[]]
+      }
+    },
+    computed:{
+      fullName(){
+        console.log('computed fullName')
+        return this.firstname + this.lastName
       }
     }
     // data: { // 此时vm.$options.data也有set get
@@ -43,22 +45,24 @@
   })
   // console.log(vm)
 
-  // let timer = setTimeout(()=>{
-  //   vm.name = '长春'
-  //   vm.age += 3
-  //   address = 'address' // 不会触发更新 因为模板中没有引用该属性 不进行依赖收集
-  //   // vm._update(vm._render()) // 手动更新 需要优化成属性更新 自动更新视图（观察者模式：依赖收集 重新渲染）
-  // },3000)
+  let timer = setTimeout(()=>{
+    // vm.name = '长春'
+    // vm.age += 3
+    // address = 'address' // 不会触发更新 因为模板中没有引用该属性 不进行依赖收集
+    // vm._update(vm._render()) // 手动更新 需要优化成属性更新 自动更新视图（观察者模式：依赖收集 重新渲染）
+    vm.firstname = '上官' // 改变时 会执行计算属性watcher跟新操作 需要将watcher.dirty = true
+  },3000)
 
-  vm.$nextTick(()=>{
-    console.log('赋值前== ',document.querySelector('#app').innerHTML)
-  })
-  vm.name = '长春'
-  vm.$nextTick(()=>{
-    console.log('赋值后== ',document.querySelector('#app').innerHTML)
-  })
-  vm.hobby[2].push('ccc') 
-  vm.hobby[2].push('ddd') 
+  // vm.$nextTick(()=>{
+  //   console.log('赋值前== ',document.querySelector('#app').innerHTML)
+  // })
+  // vm.name = '长春'
+  // vm.$nextTick(()=>{
+  //   console.log('赋值后== ',document.querySelector('#app').innerHTML)
+  // })
+  // vm.hobby[2].push('ccc') 
+  // vm.hobby[2].push('ddd') 
   // vm.hobby.push('111')
+  
 </script>
 </html>

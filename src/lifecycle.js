@@ -2,7 +2,7 @@ import {
   createElementVNode,
   createTextVNode
 } from "./vnode"
-import Watcher from "./watcher"
+import Watcher from "./observe/watcher"
 
 export function initLifeCycle(Vue) {
 

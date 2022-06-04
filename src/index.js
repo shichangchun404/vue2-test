@@ -1,6 +1,6 @@
 import { initMixin } from "./init"
 import { initLifeCycle } from "./lifecycle"
-import { nextTick } from "./watcher"
+import { nextTick } from "./observe/watcher"
 
 function Vue(options){
   this._init(options) // 原型上组册了方法
