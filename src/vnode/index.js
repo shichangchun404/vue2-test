@@ -1,5 +1,9 @@
-export function createElementVNode(vm, tag, data={}, ...children){
-  let key = data.key
+export function createElementVNode(vm, tag, data, ...children){
+  let key
+  if(data){
+    key = data.key
+  }
+   
 
   return vnode(vm, tag, key, data, children)
 

@@ -11,13 +11,16 @@
 
 <body>
  <div id="app" class="app" style="color:red;background: gray;">
-    你好 {{address}}
+  {{ name }}, {{ name }}, {{ name }}, 
    <div class="name" disabled>
     hi {{ name }}, {{name}} hi
    </div>
-   <p class="age">
+   <p class="age" style="color:aqua">
     i am {{age}} years old
    </p> 
+   <div>
+    hobby === {{hobby}}
+   </div>
  </div>
 </body>
 <script>
@@ -30,7 +33,7 @@
         address: {
           city: '北京'
         },
-        hobby: ['book', 'sports', { name: '小红', age: 18 }]
+        hobby: ['book', 'sports',[]]
       }
     }
     // data: { // 此时vm.$options.data也有set get
@@ -38,6 +41,24 @@
     //   age: 20
     // }
   })
-  console.log(vm)
+  // console.log(vm)
+
+  // let timer = setTimeout(()=>{
+  //   vm.name = '长春'
+  //   vm.age += 3
+  //   address = 'address' // 不会触发更新 因为模板中没有引用该属性 不进行依赖收集
+  //   // vm._update(vm._render()) // 手动更新 需要优化成属性更新 自动更新视图（观察者模式：依赖收集 重新渲染）
+  // },3000)
+
+  vm.$nextTick(()=>{
+    console.log('赋值前== ',document.querySelector('#app').innerHTML)
+  })
+  vm.name = '长春'
+  vm.$nextTick(()=>{
+    console.log('赋值后== ',document.querySelector('#app').innerHTML)
+  })
+  vm.hobby[2].push('ccc') 
+  vm.hobby[2].push('ddd') 
+  // vm.hobby.push('111')
 </script>
 </html>

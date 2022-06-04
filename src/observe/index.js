@@ -1,7 +1,11 @@
+import Dep from "../dep"
 import newArrayProto from "./array"
 
 class Observer {
   constructor(data) {
+
+   this.dep = new Dep() // 给所有的对象和数组都添加dep属性
+
     // 把Observer实例赋值给data.__ob__ 使data可以灵活的使用walk与observeArray方法 进行劫持操作 
     // 可以观察数据如果有__ob__属性 则表示被观察过了 通过它做一次拦截标识 否则会死循环加__ob__  所以将__ob__设置成不可枚举
     // data.__ob__ = this // 有问题
@@ -39,20 +43,39 @@ class Observer {
     })
   }
 }
+function dependArray(value){
+  value.forEach(item => {
+    item.__ob__&&item.__ob__.dep.depend()
+    if(Array.isArray(item)){
+      dependArray(item)
+    }
+  })
+}
 
 export function defineReactive(target, key, value) { // 此处为闭包
-  if(typeof value == 'object'){
-    observe(value)
-  }
+  let childob = observe(value) // 当 value = [1,2,3] 数组的每一项是无法劫持 无法直接收集依赖
+  const dep = new Dep(key) 
+  // 每个属性都有一个dep 注意此处与下面的执行顺序 一个属性只定义一次（new Dep(key) ） 取值会取多次
+  //（一个组件中的同个属性有多个 但是只有一个dep实例但是同个属性 dep）
+
   Object.defineProperty(target, key, {
-    get() { // 获取值时
-      // console.log('get value ', value)
+    get() { // 获取值时 同名属性会取多次  但是是一个dep实例 因为形成闭包 dep不会被销毁
+      if(Dep.target){
+        dep.depend() // 让这个属性 记住当前的watcher *******  核心 依赖收集       *******
+        if(childob){
+          childob.dep.depend() // 让数组与对象本身 也进行依赖收集
+          if(Array.isArray(value)){
+            dependArray(value)
+          }
+        }
+      }
       return value
     },
     set(newValue) { // 设置值时触发
       // console.log('set value ', 'oldValue= ', value, 'newValue=', newValue)
       if (value === newValue) return
       value = newValue
+      dep.notify() // *******  核心 通知更新       *******
     }
   })
 
