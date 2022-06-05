@@ -37,6 +37,11 @@
         console.log('computed fullName')
         return this.firstname + this.lastName
       }
+    },
+    watch: {
+      firstname(oldValue, newValue){
+        console.log('watch firstname = ', oldValue, newValue)
+      }
     }
     // data: { // 此时vm.$options.data也有set get
     //   name: 'scc',
@@ -63,6 +68,11 @@
   // vm.hobby[2].push('ccc') 
   // vm.hobby[2].push('ddd') 
   // vm.hobby.push('111')
+
+  // watch 底层最终调用 $watch
+  vm.$watch(()=>vm.firstname, (newValue, oldValue)=>{
+    console.log('vm.$watch = ', oldValue, newValue)
+  })
   
 </script>
 </html>

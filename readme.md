@@ -24,3 +24,8 @@ vm._update(vnode) 根据虚拟DOM 产生真是DOM
   # 异步更新策略
 
   # mixin实现原理
+
+  # 计算属性
+  底层带有dirty属性的watcher
+  计算属性不收集依赖 而是让其依赖的属性去收集依赖
+  计算属性出栈后 还要渲染watcher 让计算属性watcher里的属性 去收集上一层watcher

@@ -10,6 +10,9 @@ export function initState(vm){
   if(opts.computed){
     initComputed(vm)
   }
+  if(opts.watch){
+    initWatch(vm)
+  }
 }
 
 function proxy(vm, target, key){
@@ -77,4 +80,34 @@ function createComputedGetter(key){
     }
     return watcher.value
   }
+}
+
+function initWatch(vm){
+  const watch = vm.$options.watch
+  for(let key in watch){
+    let handler = watch[key] // 可能是字符串 数组 函数 对象
+    if(Array.isArray(handler)){
+      handler.forEach(item => {
+        createWatch(vm, key, item)
+      })
+    }else{
+      createWatch(vm, key, handler)
+    }
+
+  }
+}
+
+function createWatch(vm, key, handler){
+  let options = { user: true } // 表示用户自己写的watch
+  // hangdler 可能是字符串 函数 对象
+  if(typeof handler === 'string'){ // 是字符串时 key是menthods中的方法名 回调函数即是其方法体
+    handler = vm[handler]
+  }
+  if(typeof handler === 'object'){
+    handler = handler['handler']
+    options.deep = handler.deep
+    options.immde = handler.immde
+  }
+  // console.log(key, handler, options)
+  return vm.$watch(key, handler, options)
 }

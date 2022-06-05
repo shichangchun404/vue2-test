@@ -7,17 +7,27 @@ let id = 0
 
 // 每个属性都有一个dep（被观察者） watcher就是观察者（属性变化了 会通知观察者来更新） 观察者模式
 class Watcher {
-  constructor(vm, fn, options) {
+  constructor(vm, exprOrFn, options={}, cb) {
+    // console.log('Watcher vm ', vm,' \n exprOrFn = ', exprOrFn, ' \n options = ',options,' \n cb =',cb)
+    if(typeof exprOrFn === 'string'){ // exprOrFn 统一处理成函数形式
+      this.getter = function(){
+        return vm[exprOrFn]
+      }
+    }else{
+      this.getter = exprOrFn // getter调用可以进行取值操作
+    }
     this.vm = vm
     this.id = id++
     this.renderWatcher = options // 是否是渲染watcher标识
-    this.getter = fn // getter调用可以进行取值操作
+   
+    this.cb = cb
     this.deps = [] // 后续需要的计算属性与清理工作
     this.depIds = new Set()
     this.lazy = options.lazy
     this.dirty = this.lazy // 缓存之
+    this.user = options.user // 是否是用户自己的watch标识
 
-    this.lazy ? undefined : this.get()
+    this.value = this.lazy ? undefined : this.get()
   }
   addDep(dep) {
     let id = dep.id
@@ -50,8 +60,12 @@ class Watcher {
     }
   }
   run() {
-    console.log('watch run') // 在一次事件循环中 只执行一次
-    this.get()
+    console.log('watch run ', this.user) // 在一次事件循环中 只执行一次
+    let oldValue = this.value
+    let newValue = this.get()
+    if(this.user){ // 用户的watch 要执行其回调cb
+      this.cb.call(this.vm, oldValue, newValue)
+    }
   }
   depend(){
     let i = this.deps.length
