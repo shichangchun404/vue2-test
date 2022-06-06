@@ -11,7 +11,7 @@ class Watcher {
     // console.log('Watcher vm ', vm,' \n exprOrFn = ', exprOrFn, ' \n options = ',options,' \n cb =',cb)
     if(typeof exprOrFn === 'string'){ // exprOrFn 统一处理成函数形式
       this.getter = function(){
-        return vm[exprOrFn]
+        return vm[exprOrFn] // vm.firstName
       }
     }else{
       this.getter = exprOrFn // getter调用可以进行取值操作
