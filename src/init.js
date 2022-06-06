@@ -1,4 +1,4 @@
-import { compileToFunction } from "./complier"
+import { compileToFunction } from "./compiler"
 import { mountComponent } from "./lifecycle"
 import { initState } from "./state"
 

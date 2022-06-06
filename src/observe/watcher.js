@@ -19,8 +19,7 @@ class Watcher {
     this.vm = vm
     this.id = id++
     this.renderWatcher = options // 是否是渲染watcher标识
-   
-    this.cb = cb
+    this.cb = cb // 用户watch属性对应的回调函数
     this.deps = [] // 后续需要的计算属性与清理工作
     this.depIds = new Set()
     this.lazy = options.lazy

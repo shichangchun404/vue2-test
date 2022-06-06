@@ -73,11 +73,18 @@ export function compileToFunction(template) {
 
   // 1 将template 转换成ast语法树
   let ast = parseHtml(template)
+  // {
+  //   tag,
+  //   attrs,
+  //   type: ELEMENT_TYPE,
+  //   parent: null,
+  //   children: []
+  // }
 
   // 2 生成render方法 (执行后的结果 得到虚拟DOM)
-  // 模板引擎shi实现原理 with + new Function
+  // 模板引擎实现原理 with + new Function
   let code = codegen(ast)
-  code = `with(this){ return ${code}}`
+  
   let render = new Function(code) // 根据代码生成函数
 
   return render
