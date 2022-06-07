@@ -6,6 +6,7 @@ import Dep, {
 let id = 0
 
 // 每个属性都有一个dep（被观察者） watcher就是观察者（属性变化了 会通知观察者来更新） 观察者模式
+// 按照类型 可分为渲染watcher 计算属性watcher watch属性的watcher
 class Watcher {
   constructor(vm, exprOrFn, options={}, cb) {
     // console.log('Watcher vm ', vm,' \n exprOrFn = ', exprOrFn, ' \n options = ',options,' \n cb =',cb)
@@ -23,7 +24,7 @@ class Watcher {
     this.deps = [] // 后续需要的计算属性与清理工作
     this.depIds = new Set()
     this.lazy = options.lazy
-    this.dirty = this.lazy // 缓存之
+    this.dirty = this.lazy // 缓存值 计算属性的watch
     this.user = options.user // 是否是用户自己的watch标识
 
     this.value = this.lazy ? undefined : this.get()

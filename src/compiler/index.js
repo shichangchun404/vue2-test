@@ -84,7 +84,7 @@ export function compileToFunction(template) {
   // 2 生成render方法 (执行后的结果 得到虚拟DOM)
   // 模板引擎实现原理 with + new Function
   let code = codegen(ast)
-  
+  code = `with(this){ return ${code}}`
   let render = new Function(code) // 根据代码生成函数
 
   return render
