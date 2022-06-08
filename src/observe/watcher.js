@@ -38,14 +38,14 @@ class Watcher {
     }
   }
   evalute() {
-    this.value = this.get() // 获取用户函数的返回值 
+    this.value = this.get() // 获取用户函数的返回值 计算属性
     this.dirty = false
     console.log('evalute ', this.value)
   }
   get() {
     // Dep.target = this // 全局唯一一份 
     pushTarget(this)
-    let value = this.getter.call(this.vm) // 会触发get defineReactive函数
+    let value = this.getter.call(this.vm) // 会触发get defineReactive函数 计算属性watcher 会执行计算属性get 此时会对依赖的属性进行取值 此时依赖的属性会手机计算属性的watcher
     //Dep.target = null // 渲染完就清空 控制只在模板里取值时 才进行依赖收集 用户在js脚本里vm.xxx取值时 不触发
     popTarget()
     return value
@@ -67,8 +67,9 @@ class Watcher {
       this.cb.call(this.vm, oldValue, newValue)
     }
   }
-  depend(){
-    let i = this.deps.length
+  depend(){ // 
+    console.log('watcher depend this.deps', this.deps)
+    let i = this.deps.length // 计算属性依赖属性对应的deps 比如计算属性fullName 依赖的 firstname 与 lastName 2个dep
     while(i--){
       this.deps[i].depend() // 让计算属性watcher 也收集渲染watcher
     }

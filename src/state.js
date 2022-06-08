@@ -48,6 +48,7 @@ function initComputed(vm){
 
   for(let key in computed){
     let userDef = computed[key]
+    // 计算属性的形式 函数 或者 对象
     const getter = typeof userDef == 'function' ? userDef : userDef.get
 
     // 监控计算属性中get的变化 如果直接 new Watcher() 默认会执行fn
@@ -58,7 +59,7 @@ function initComputed(vm){
 }
 
 function defindeComputed(vm, key, userDef){
- 
+  console.log('defindeComputed key ', key)
   const setter = userDef.set || (()=>{})
   Object.defineProperty(vm, key, {
     get: createComputedGetter(key),
@@ -66,16 +67,20 @@ function defindeComputed(vm, key, userDef){
   })
 }
 
-// 计算属性不收集依赖 而是让其依赖的属性去收集依赖
+// 计算属性不收集依赖 而是让其依赖的属性去收集依赖 当计算属性被取值（模板里引用了 此时会有渲染模板watcher还未出栈）时
+// ********* 计算属性核心代码入口 *********
 function createComputedGetter(key){
   // 需要检测是否执行这个getter
   return function(){
+    console.log('createComputedGetter ', key)
     let watcher = this._computerWatchers[key] // 对应属性的watcher
-    if(watcher.dirty){
-      watcher.evalute() // 求值后dirty为false 下次就不取了
+    if(watcher.dirty){ // 求值后dirty为false 下次就不取了
+      console.log('createComputedGetter 执行 watcher.evalute', key)
+      watcher.evalute() // 这里先将Dep.target设置成计算属性watcher 获取属性 触发依赖属性收集wathcer 执行完后计算属性出栈 Dep.target又变成外层的渲染watcher
     }
     // console.log('createComputedGetter watcher ', watcher)
-    if(Dep.target){ // 计算属性出栈后 还要渲染watcher 让计算属性watcher里的属性 去收集上一层watcher
+    if(Dep.target){ // 计算属性出栈后 还要渲染watcher 让计算属性watcher里的属性 去收集上一层watcher 此时计算属性依赖的属性firstname 的dep上subs=[Watcher,Watcher] 分别是计算属性watcher与渲染watcher
+      console.log('createComputedGetter 开始首次外层watcher', key)
       watcher.depend()
     }
     return watcher.value

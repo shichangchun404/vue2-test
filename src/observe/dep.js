@@ -2,6 +2,7 @@ let id = 0
 
 class Dep {
   constructor(key){
+    this.key = key
     this.id = id++
     this.subs = [] // 存放当前属性 存放的watcher
   }
@@ -16,6 +17,7 @@ class Dep {
   }
   notify(){
     this.subs.forEach(watcher => {
+      console.log('dep notify')
       watcher.update()
     })
   }
