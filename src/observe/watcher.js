@@ -40,7 +40,7 @@ class Watcher {
   evalute() {
     this.value = this.get() // 获取用户函数的返回值 计算属性
     this.dirty = false
-    console.log('evalute ', this.value)
+    // console.log('evalute ', this.value)
   }
   get() {
     // Dep.target = this // 全局唯一一份 
@@ -51,7 +51,7 @@ class Watcher {
     return value
   }
   update() {
-    console.log('watch update ', this.lazy)
+    // console.log('watch update ', this.lazy)
     // this.get() // 同步更新 这样赋值一次 更新一次 性能不好
     if (this.lazy) { // 如果是计算属性 依赖的值变化了 将dirty变为true
       this.dirty = true
@@ -60,7 +60,7 @@ class Watcher {
     }
   }
   run() {
-    console.log('watch run ', this.user) // 在一次事件循环中 只执行一次
+    // console.log('watch run ', this.user) // 在一次事件循环中 只执行一次
     let oldValue = this.value
     let newValue = this.get()
     if(this.user){ // 用户的watch 要执行其回调cb
@@ -68,7 +68,7 @@ class Watcher {
     }
   }
   depend(){ // 
-    console.log('watcher depend this.deps', this.deps)
+    // console.log('watcher depend this.deps', this.deps)
     let i = this.deps.length // 计算属性依赖属性对应的deps 比如计算属性fullName 依赖的 firstname 与 lastName 2个dep
     while(i--){
       this.deps[i].depend() // 让计算属性watcher 也收集渲染watcher
@@ -78,7 +78,7 @@ class Watcher {
 
 let queue = []
 let has = {}
-let pending = false // 防抖
+let pending = false // 防抖 一次同步任务中只添加一次异步更新任务
 
 function queueWatcher(watcher) {
   let id = watcher.id
@@ -122,7 +122,7 @@ if (Promise) {
     Promise.resolve().then(flushCallbacks)
   }
 } else if (MutationObserver) {
-  console.log('timerFunc MutationObserver')
+  // console.log('timerFunc MutationObserver')
   let obser = new MutationObserver(flushCallbacks)
   let textNode = document.createTextNode(1)
   obser.observe(textNode, {
@@ -132,12 +132,12 @@ if (Promise) {
     textNode.textContent = 2
   }
 } else if (setImmediate) {
-  console.log('timerFunc setImmediate')
+  // console.log('timerFunc setImmediate')
   timerFunc = () => {
     setImmediate(flushCallbacks)
   }
 } else {
-  console.log('timerFunc setTimeout')
+  // console.log('timerFunc setTimeout')
   timerFunc = () => {
     setTimeout(flushCallbacks)
   }

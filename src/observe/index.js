@@ -53,7 +53,7 @@ function dependArray(value){
 }
 
 export function defineReactive(target, key, value) { // 此处为闭包
-  console.log('defineReactive key ', key)
+  // console.log('defineReactive key ', key)
   let childob = observe(value) // 当 value = [1,2,3] 数组的每一项是无法劫持 无法直接收集依赖
   const dep = new Dep(key) 
   // 每个属性都有一个dep 注意此处与下面的执行顺序 一个属性只定义一次（new Dep(key) ） 取值会取多次
@@ -61,9 +61,9 @@ export function defineReactive(target, key, value) { // 此处为闭包
 
   Object.defineProperty(target, key, {
     get() { // 获取值时 同名属性会取多次  但是是一个dep实例 因为形成闭包 dep不会被销毁
-      console.log('get value ', value)
+      // console.log('get value ', value)
       if(Dep.target){
-        console.log('核心 依赖收集 ', value)
+        // console.log('核心 依赖收集 ', value)
         dep.depend() // 让这个属性 记住当前的watcher *******  核心 依赖收集       *******
         if(childob){
           childob.dep.depend() // 让数组与对象本身 也进行依赖收集
@@ -75,7 +75,7 @@ export function defineReactive(target, key, value) { // 此处为闭包
       return value
     },
     set(newValue) { // 设置值时触发
-      console.log('set value ', 'oldValue= ', value, 'newValue=', newValue)
+      // console.log('set value ', 'oldValue= ', value, 'newValue=', newValue)
       if (value === newValue) return
       value = newValue
       dep.notify() // *******  核心 通知更新       *******

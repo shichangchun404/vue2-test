@@ -16,13 +16,14 @@ vm._update(vnode) 根据虚拟DOM 产生真是DOM
   -- render 函数执行产生虚拟节点 使用响应式数据
   -- 根据虚拟节点 生成真是DOM
 
-
   # 观察者实现依赖收集
   1 给模板中的属性 添加收集器(dep)
   2 页面渲染时 将页面渲染逻辑封装到watcher中（vm._update(vm._render) ）
   3 让dep记住这个watcher 属性变化了 让对应的dep中存放的watcher进行更新渲染
   # 异步更新策略
-
+  当vm上的属性发生变更时，会触发该属性的set函数，此时该属性的dep会nodify,会让dep收集的watcher(subs)依次update.
+  如果同步任务中多个属性多次变更，会多次触发watcher的update,这样会影响性能，所以在一次同步更新中，会将所有的update放到一个队列中，通过一次异步任务队列一次执行
+  vm.$nextTick() 在vue2才用了优雅降级的方案，promise(ie不兼容) > MutationObserver（h5） > setImmediate（ie独有） > setTimeout
   # mixin实现原理
 
   # 计算属性
@@ -35,3 +36,17 @@ vm._update(vnode) 根据虚拟DOM 产生真是DOM
   计算属性不收集依赖 而是让其依赖的属性去收集依赖 当计算属性的get函数执行时，会触发其依赖的属性get，从而触发依赖属性收集watcher, 依赖的属性会收集计算属性的watcher
   当计算属性依赖的属性变化时 依赖属性的dep会notify其收集的watcher 进行对应的update操作 此时计算属性watcher只跟新了dirty=true 特面内容的更新是通过渲染watcher的update触发 应为模板引用了计算属性 此时会对计算属性重新取值,执行evalute()!
   计算属性watcher出栈后 还要渲染watcher 让计算属性watcher里的属性 去收集上一层watcher
+
+  # watch属性 
+  watch的形式有多种 
+    -- 通过watch属性配置： 函数 对象 字符串 数组
+    -- vm.$watch(()=>vm.name, function()(){}) 或者 vm.$watch('name', function()(){}) 
+  最后都是通过底层的$watch实现 new Watcher(vm, exprOrFn, options, cb)  
+  watch属性的Watcher的特点
+    -- exprOrFn最后会封装成一个函数return监听的属性名 如()=>vm.name  并把它赋值给getter. 
+    -- new时: 会执行一次get 使监听的属性触发get,从而进行依赖收集，收集当前watch属性的Watcher
+    -- cb 即watch属性监听的回调函数
+    -- user watch属性的标志 
+  当监听的属性改变时，该属性的dep会notify,触发他subs收集的watcher依次执行update，从而让watch属性的Watcher更新后执行cb(判断watcher属性user是否true)
+
+

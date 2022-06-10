@@ -59,7 +59,7 @@ function initComputed(vm){
 }
 
 function defindeComputed(vm, key, userDef){
-  console.log('defindeComputed key ', key)
+  // console.log('defindeComputed key ', key)
   const setter = userDef.set || (()=>{})
   Object.defineProperty(vm, key, {
     get: createComputedGetter(key),
@@ -72,15 +72,15 @@ function defindeComputed(vm, key, userDef){
 function createComputedGetter(key){
   // 需要检测是否执行这个getter
   return function(){
-    console.log('createComputedGetter ', key)
+    // console.log('createComputedGetter ', key)
     let watcher = this._computerWatchers[key] // 对应属性的watcher
     if(watcher.dirty){ // 求值后dirty为false 下次就不取了
-      console.log('createComputedGetter 执行 watcher.evalute', key)
+      // console.log('createComputedGetter 执行 watcher.evalute', key)
       watcher.evalute() // 这里先将Dep.target设置成计算属性watcher 获取属性 触发依赖属性收集wathcer 执行完后计算属性出栈 Dep.target又变成外层的渲染watcher
     }
     // console.log('createComputedGetter watcher ', watcher)
     if(Dep.target){ // 计算属性出栈后 还要渲染watcher 让计算属性watcher里的属性 去收集上一层watcher 此时计算属性依赖的属性firstname 的dep上subs=[Watcher,Watcher] 分别是计算属性watcher与渲染watcher
-      console.log('createComputedGetter 开始首次外层watcher', key)
+      // console.log('createComputedGetter 开始首次外层watcher', key)
       watcher.depend()
     }
     return watcher.value
@@ -111,7 +111,7 @@ function createWatch(vm, key, handler){
   if(typeof handler === 'object'){
     handler = handler['handler']
     options.deep = handler.deep
-    options.immde = handler.immde
+    options.immediate = handler.immediate
   }
   // console.log(key, handler, options)
   return vm.$watch(key, handler, options)
