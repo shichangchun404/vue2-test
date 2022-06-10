@@ -25,6 +25,8 @@ vm._update(vnode) 根据虚拟DOM 产生真是DOM
   如果同步任务中多个属性多次变更，会多次触发watcher的update,这样会影响性能，所以在一次同步更新中，会将所有的update放到一个队列中，通过一次异步任务队列一次执行
   vm.$nextTick() 在vue2才用了优雅降级的方案，promise(ie不兼容) > MutationObserver（h5） > setImmediate（ie独有） > setTimeout
   # mixin实现原理
+  初始化 Vue.options = {}，在Vue组册静态方法，Vue.mixin(options); 将其与mixin的对象按照属性进行合并 采用策略模式， 不同的属性采用不同的策略，比如生命周期函数会合并成一个队列
+  init时 将Vue.options与new Vue()时传入的options再次合并，并且放到vue实例$options上
 
   # 计算属性
   计算属性初始化，通过Object.defineProperty将每个属性绑定到vm实例上，并给每个计算属性new Watcher(), get函数作为Watcher的第二个参数
