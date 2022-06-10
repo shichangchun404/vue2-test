@@ -1,6 +1,17 @@
 import Dep from "./observe/dep"
 import { observe } from "./observe/index"
 import Watcher from "./observe/watcher"
+import Watcher, { nextTick } from "./observe/watcher"
+
+export function inintStateMixin(Vue){
+  Vue.prototype.$nextTick = nextTick
+  Vue.prototype.$watch = function(exprOrFn, cb, options={user: true}){
+    // console.log(exprOrFn, cb, options)
+    //exprOrFn可能是字符串也可能是函数 firstName ()=>vm.firstName
+    // 当firstName 值变化了 直接执行cb函数
+    new Watcher(this, exprOrFn, options, cb)
+  }
+}
 
 export function initState(vm){
   const opts = vm.$options
@@ -116,3 +127,4 @@ function createWatch(vm, key, handler){
   // console.log(key, handler, options)
   return vm.$watch(key, handler, options)
 }
+
