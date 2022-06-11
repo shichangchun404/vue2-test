@@ -52,3 +52,6 @@ vm._update(vnode) 根据虚拟DOM 产生真是DOM
   当监听的属性改变时，该属性的dep会notify,触发他subs收集的watcher依次执行update，从而让watch属性的Watcher更新后执行cb(判断watcher属性user是否true)
 
 
+# diff 算法
+1 两个节点不一样 直接删除老的换上新的
+2 两个节点是同一节点（标签名与key一样）比较两个是否有差异

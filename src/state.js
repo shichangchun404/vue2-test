@@ -1,6 +1,5 @@
 import Dep from "./observe/dep"
 import { observe } from "./observe/index"
-import Watcher from "./observe/watcher"
 import Watcher, { nextTick } from "./observe/watcher"
 
 export function inintStateMixin(Vue){
