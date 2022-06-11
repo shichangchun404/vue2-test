@@ -1,7 +1,7 @@
 import { isSameVnode } from "."
 
 export function createElm(vnode) {
-  const {
+  let {
     vm,
     tag,
     data,
@@ -9,10 +9,14 @@ export function createElm(vnode) {
     text
   } = vnode
   if (typeof tag === 'string') { // 标签
+    if(createCopmonent(vnode)){
+      return vnode.componentInstance.$el
+    }
+
     vnode.el = document.createElement(tag)
     patchProps(vnode.el, {}, data)
     children.forEach(child => { // 递归创建子真实节点 
-      vnode.el.appendChild(createElm(child))
+      child&&vnode.el.appendChild(createElm(child))
     })
 
   } else [ // 文本
@@ -50,6 +54,10 @@ export function patchProps(el, oldDate, data) {
 }
 
 export function patch(oldVNode, vnode) {
+  if(!oldVNode){ // 组件的挂载 
+    return createElm(vnode)
+  }
+
   let isRealElement = oldVNode.nodeType // 初始化时 是真实dom 
   if (isRealElement) {
     const elm = oldVNode // 老节点
@@ -121,7 +129,7 @@ function updateChildren(el, oldChildren, newChildren){ // 利用双指针循环
   let newEndVnode = oldChildren[newEndIndex]
 
   function makeMapByKey(oldChildren){
-    oldChildren.reduce((map,child, index)=>{
+    oldChildren.reduce((map, child, index)=>{
       map[child.key] = index
       return map
     },{})
@@ -197,4 +205,15 @@ function updateChildren(el, oldChildren, newChildren){ // 利用双指针循环
     }
   }
 
+}
+
+// 如果是组件 调用组件的init()
+function createCopmonent(vnode){
+  let i = vnode.data || {}
+  if((i = i.hook) && (i = i.init)){
+    i(vnode)
+    return true
+  }else{
+    return false
+  }
 }

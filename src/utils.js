@@ -14,6 +14,14 @@ lifecycle.forEach(hook => { // 生命周期的mixin混入规则 同名的钩子�
     }
   }
 })
+// 组件合并策略
+strats.components = function(parentValue, childValue){
+  let result = Object.create(parentValue)
+  for(let key in childValue){
+    result[key] = childValue[key]
+  }
+  return result
+}
 
 export function mergeOptions(parent, child){
   const options = {}

@@ -4,10 +4,13 @@ import { initLifeCycle } from "./lifecycle"
 import { inintStateMixin } from "./state"
 
 
-class Vue{
-  constructor(options){
-    this._init(options) // 原型上组册了方法
-  }
+// class Vue{
+//   constructor(options){
+//     this._init(options) // 原型上组册了方法
+//   }
+// }
+function Vue(options){
+  this._init(options)
 }
 
 

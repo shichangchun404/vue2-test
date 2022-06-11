@@ -30,7 +30,7 @@ export function initMixin(Vue){ // 给vue增加init方法
     let opts = vm.$options
     if(!opts.render){ // 配置中没有render
       let template
-      if(!opts.template && el){ // 配置中没有template 就以页面dom为模板
+      if(!opts.template){ // 配置中没有template 就以页面dom为模板
         template = el.outerHTML
       }else { // 否则以配置template的为模板
         template = opts.template
